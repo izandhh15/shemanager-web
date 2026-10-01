@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SheManagerGame — El mánager de fútbol femenino</title>
+    <meta name="description" content="Juego mánager de fútbol femenino gratuito. Dirige clubes reales de 20 ligas de 12 países o una de las 198 selecciones nacionales. En tu navegador, sin instalación.">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate" hreflang="es" href="/index.html">
+    <link rel="alternate" hreflang="en" href="/index-en.html">
+    <link rel="alternate" hreflang="x-default" href="/index.html">
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=barlow-semi-condensed:500,600,700|inter:400,500" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0B1120;
+            --bg-soft: #0F172A;
+            --line: rgba(255,255,255,.08);
+            --text: #F1F5F9;
+            --muted: #94A3B8;
+            --faint: #64748B;
+            --accent: #A855F7;
+            --accent-soft: rgba(168,85,247,.12);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: Inter, system-ui, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+        }
+        .wrap { max-width: 72rem; margin: 0 auto; padding: 0 1.5rem; }
+        h1, h2, h3, .heading { font-family: "Barlow Semi Condensed", sans-serif; }
+
+        /* Nav */
+        nav { display: flex; align-items: center; justify-content: space-between; padding: 1.75rem 0; }
+        .logo { font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 1.35rem; letter-spacing: -.01em; color: var(--text); text-decoration: none; }
+        .logo span { color: var(--accent); }
+        .nav-links { display: flex; align-items: center; gap: 1.25rem; font-size: .85rem; }
+        .nav-links a { color: var(--muted); text-decoration: none; transition: color .2s; }
+        .nav-links a:hover { color: var(--text); }
+        .lang { font-weight: 500; }
+        .lang.active { color: var(--text); }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: .8rem 2rem; border-radius: .5rem;
+            font-weight: 600; font-size: .9rem; letter-spacing: .04em; text-transform: uppercase;
+            text-decoration: none; transition: all .2s; cursor: pointer; border: none;
+        }
+        .btn-primary { background: var(--accent); color: #fff; }
+        .btn-primary:hover { background: #9333EA; transform: translateY(-1px); }
+        .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+        .btn-ghost:hover { border-color: rgba(255,255,255,.25); }
+
+        /* Hero */
+        .hero { text-align: center; padding: 5rem 0 4rem; }
+        .hero .kicker {
+            display: inline-block; font-size: .75rem; font-weight: 500;
+            letter-spacing: .18em; text-transform: uppercase; color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.25rem);
+            font-weight: 700; line-height: 1.05; letter-spacing: -.02em;
+            max-width: 16ch; margin: 0 auto 1.5rem;
+        }
+        .hero p { color: var(--muted); font-size: 1.125rem; max-width: 38rem; margin: 0 auto 2.5rem; }
+        .hero-cta { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .hero-note { margin-top: 1rem; font-size: .8rem; color: var(--faint); }
+
+        /* Stats */
+        .stats {
+            display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
+            padding: 2.5rem 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+            margin: 1rem 0 0;
+        }
+        .stat { text-align: center; }
+        .stat .num { font-family: "Barlow Semi Condensed", sans-serif; font-size: 2rem; font-weight: 700; }
+        .stat .lbl { font-size: .75rem; color: var(--faint); text-transform: uppercase; letter-spacing: .12em; margin-top: .25rem; }
+
+        /* Sections */
+        section.block { padding: 5rem 0; }
+        .section-head { text-align: center; margin-bottom: 3rem; }
+        .section-head h2 { font-size: 2rem; font-weight: 700; letter-spacing: -.01em; margin-bottom: .75rem; }
+        .section-head p { color: var(--muted); max-width: 36rem; margin: 0 auto; }
+
+        /* Features — minimal list */
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 2.5rem 2rem; }
+        .feature h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: .4rem; }
+        .feature p { font-size: .925rem; color: var(--muted); }
+        .feature .dot { width: .5rem; height: .5rem; border-radius: 50%; background: var(--accent); margin-bottom: .9rem; }
+
+        /* Quote */
+        .quote { text-align: center; max-width: 44rem; margin: 0 auto; }
+        .quote p { font-size: 1.35rem; font-weight: 500; line-height: 1.5; letter-spacing: -.01em; }
+        .quote footer { margin-top: 1.25rem; font-size: .8rem; color: var(--faint); text-transform: uppercase; letter-spacing: .12em; }
+
+        /* CTA */
+        .cta { text-align: center; padding: 5rem 0; border-top: 1px solid var(--line); }
+        .cta h2 { font-size: 2.25rem; font-weight: 700; margin-bottom: 1rem; }
+        .cta p { color: var(--muted); margin-bottom: 2rem; }
+
+        /* Footer */
+        footer { border-top: 1px solid var(--line); padding: 2.5rem 0; }
+        .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+        .footer-inner .logo { font-size: 1.1rem; }
+        .footer-links { display: flex; gap: 1.5rem; font-size: .8rem; }
+        .footer-links a { color: var(--faint); text-decoration: none; }
+        .footer-links a:hover { color: var(--muted); }
+        .copy { width: 100%; font-size: .75rem; color: var(--faint); margin-top: 1rem; }
+
+        @media (max-width: 640px) {
+            .hero { padding: 3.5rem 0 3rem; }
+            section.block { padding: 3.5rem 0; }
+            .stats { gap: 1.75rem; }
+            .nav-cta { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wrap">
+        <nav>
+            <a href="/index.html" class="logo">She<span>Manager</span>Game</a>
+            <div class="nav-links">
+                <a href="/index.html" class="lang active">ES</a>
+                <a href="/index-en.html" class="lang">EN</a>
+                <a href="https://shemanager.wasmer.app/login">Iniciar sesión</a>
+                <a href="https://shemanager.wasmer.app/register" class="btn btn-primary nav-cta" style="padding:.6rem 1.4rem;">Jugar gratis</a>
+            </div>
+        </nav>
+    </div>
+
+    <div class="wrap">
+        <header class="hero">
+            <span class="kicker">100% fútbol femenino</span>
+            <h1>El mánager que el fútbol femenino merecía.</h1>
+            <p>Dirige clubes reales de 20 ligas de 12 países o ponte al frente de una de las 198 selecciones nacionales. En tu navegador, sin instalación. Gratis.</p>
+            <div class="hero-cta">
+                <a href="https://shemanager.wasmer.app/register" class="btn btn-primary">Jugar gratis</a>
+                <a href="https://shemanager.wasmer.app/login" class="btn btn-ghost">Iniciar sesión</a>
+            </div>
+            <p class="hero-note">Sin pagos · Sin descargas · Registro abierto</p>
+        </header>
+
+        <div class="stats">
+            <div class="stat"><div class="num">12</div><div class="lbl">Países</div></div>
+            <div class="stat"><div class="num">50+</div><div class="lbl">Competiciones</div></div>
+            <div class="stat"><div class="num">470+</div><div class="lbl">Equipos</div></div>
+            <div class="stat"><div class="num">12.000+</div><div class="lbl">Jugadoras</div></div>
+        </div>
+
+        <section class="block">
+            <div class="section-head">
+                <h2>Todo lo que necesitas</h2>
+                <p>Clubes, selecciones, tácticas, fichajes y cantera. El juego completo, sin recortes.</p>
+            </div>
+            <div class="features">
+                <div class="feature">
+                    <div class="dot"></div>
+                    <h3>Modo selecciones</h3>
+                    <p>Nations League con grupos reales, clasificación para el Mundial 2027 y Eurocopa. Convocatorias en cada parón FIFA.</p>
+                </div>
+                <div class="feature">
+                    <div class="dot"></div>
+                    <h3>Modo dual</h3>
+                    <p>Dirige tu club y tu selección a la vez. La liga el fin de semana, la selección en los parones.</p>
+                </div>
+                <div class="feature">
+                    <div class="dot"></div>
+                    <h3>Carrera de mánager</h3>
+                    <p>Empieza en un filial —La Masía, La Fábrica— y asciende hasta el primer equipo. O solicita empleo en otros clubs y asume el riesgo.</p>
+                </div>
+                <div class="feature">
+                    <div class="dot"></div>
+                    <h3>Fichajes y ojeo</h3>
+                    <p>Ojeadores, negociaciones con contraofertas, cesiones, precontratos y agentes libres de todo el mundo.</p>
+                </div>
+                <div class="feature">
+                    <div class="dot"></div>
+                    <h3>Partido en vivo</h3>
+                    <p>Cada partido en tiempo real: sustituciones, cambios de formación y ajustes tácticos sobre la marcha.</p>
+                </div>
+                <div class="feature">
+                    <div class="dot"></div>
+                    <h3>Datos reales</h3>
+                    <p>12.000+ jugadoras reales con datos de Soccerdonna, actualizados a la temporada 2026/27.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="block" style="padding-top:1rem;">
+            <div class="quote">
+                <p>"Desde el PC Fútbol 7.0 no me pasaba esto con un mánager: llevo una hora y media jugando sin darme cuenta."</p>
+                <footer>Beta tester</footer>
+            </div>
+        </section>
+
+        <section class="cta">
+            <h2>¿Lista para hacer historia?</h2>
+            <p>Crea tu cuenta gratis y dirige a tu equipo hoy mismo.</p>
+            <a href="https://shemanager.wasmer.app/register" class="btn btn-primary">Jugar gratis</a>
+        </section>
+    </div>
+
+    <div class="wrap">
+        <footer>
+            <div class="footer-inner">
+                <a href="/index.html" class="logo">She<span>Manager</span>Game</a>
+                <div class="footer-links">
+                    <a href="https://shemanager.wasmer.app/legal">Aviso legal</a>
+                    <a href="https://github.com/izandhh15/SheManagerGame" target="_blank" rel="noopener">GitHub</a>
+                    <a href="https://ko-fi.com/izandhh" target="_blank" rel="noopener">Donar</a>
+                </div>
+                <p class="copy">© 2026 Izan Delgado · Datos de jugadoras: Soccerdonna</p>
+            </div>
+        </footer>
+    </div>
+
+</body>
+</html>
