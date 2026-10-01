@@ -119,6 +119,56 @@
             .stats { gap: 1.75rem; }
             .nav-cta { display: none; }
         }
+
+        /* World globe */
+        .world { text-align: center; padding: 4rem 0 2rem; }
+        .globe-wrap {
+            position: relative; width: min(22rem, 80vw); height: min(22rem, 80vw);
+            margin: 2.5rem auto;
+        }
+        .globe-ring {
+            position: absolute; inset: 0; border: 1px solid var(--line);
+            border-radius: 50%; animation: spin 40s linear infinite;
+        }
+        .globe-ring.ring2 { inset: 2.5rem; animation-duration: 28s; animation-direction: reverse; opacity: .6; }
+        .globe-center {
+            position: absolute; inset: 5.5rem; border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #1E293B, #0B1120);
+            border: 1px solid var(--line);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .globe-center .big { font-family: "Barlow Semi Condensed", sans-serif; font-size: 2.2rem; font-weight: 700; line-height: 1; }
+        .globe-center .sub { font-size: .7rem; color: var(--muted); text-transform: uppercase; letter-spacing: .14em; margin-top: .4rem; }
+        .orbit-flag {
+            position: absolute; top: 50%; left: 50%;
+            width: 2.6rem; height: 2.6rem; margin: -1.3rem;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem; background: var(--bg-soft);
+            border: 1px solid var(--line); border-radius: 50%;
+            animation: spin-rev 40s linear infinite;
+            cursor: default;
+        }
+        .ring2 .orbit-flag { animation-duration: 28s; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes spin-rev { to { transform: rotate(-360deg); } }
+
+        .world-cup {
+            margin: 2rem auto 0; max-width: 44rem;
+            border: 1px solid var(--line); border-radius: 1rem;
+            padding: 2rem; background: linear-gradient(135deg, rgba(168,85,247,.08), transparent);
+        }
+        .world-cup .trophy { font-size: 2.5rem; margin-bottom: .75rem; }
+        .world-cup h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: .5rem; }
+        .world-cup p { color: var(--muted); font-size: .95rem; }
+
+        .countries { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 1rem; overflow: hidden; margin-top: 3rem; }
+        .country { background: var(--bg); padding: 1.5rem; text-align: left; }
+        .country .flag { font-size: 1.8rem; margin-bottom: .6rem; }
+        .country h4 { font-size: 1.05rem; font-weight: 600; margin-bottom: .6rem; }
+        .country ul { list-style: none; font-size: .82rem; color: var(--muted); }
+        .country ul li { padding: .2rem 0; }
+        .country ul li.league { color: var(--text); }
+        .country .tag { display: inline-block; font-size: .65rem; text-transform: uppercase; letter-spacing: .1em; color: var(--faint); margin-top: .8rem; }
     </style>
 </head>
 <body>
@@ -153,6 +203,80 @@
             <div class="stat"><div class="num">470+</div><div class="lbl">Equipos</div></div>
             <div class="stat"><div class="num">12.000+</div><div class="lbl">Jugadoras</div></div>
         </div>
+
+        <section class="world">
+            <div class="section-head">
+                <h2>Un mundo de fútbol femenino</h2>
+                <p>12 países, sus ligas y sus copas. Todo el planeta, en tu navegador.</p>
+            </div>
+            <div class="globe-wrap" id="globe">
+                <div class="globe-ring" id="ring1"></div>
+                <div class="globe-ring ring2" id="ring2"></div>
+                <div class="globe-center">
+                    <div class="big">470+</div>
+                    <div class="sub">Equipos</div>
+                    <div class="big" style="margin-top:.8rem;">12</div>
+                    <div class="sub">Países</div>
+                </div>
+            </div>
+
+            <div class="world-cup">
+                <div class="trophy">🏆</div>
+                <h3>Mundial 2027 · Brasil</h3>
+                <p>198 selecciones nacionales de todo el mundo. Clasificación completa, Nations League con grupos reales y Eurocopa. Elige tu país y haz historia.</p>
+            </div>
+
+            <div class="countries" id="countries-es"></div>
+        </section>
+
+        <script>
+        const WORLD_DATA = [
+            { flag: '🇪🇸', name: 'España', leagues: ['Liga F', 'Primera Federación', 'Segunda Federación (3 grupos)'], cups: ['Copa de la Reina', 'Supercopa de España'] },
+            { flag: '🏴󐁧󐁢󐁥󐁮󐁧󐁿', name: 'Inglaterra', leagues: ["Women's Super League", 'WSL 2'], cups: ["Women's FA Cup", 'League Cup'] },
+            { flag: '🇩🇪', name: 'Alemania', leagues: ['Frauen-Bundesliga', '2. Frauen-Bundesliga'], cups: ['DFB-Pokal Frauen', 'Supercopa'] },
+            { flag: '🇮🇹', name: 'Italia', leagues: ['Serie A Femminile', 'Serie B Femminile'], cups: ['Coppa Italia', 'Supercoppa', "Serie A Women's Cup"] },
+            { flag: '🇫🇷', name: 'Francia', leagues: ['Première Ligue', 'Seconde Ligue'], cups: ['Coupe de France', 'Trophée des Championnes'] },
+            { flag: '🇵🇹', name: 'Portugal', leagues: ['Liga BPI'], cups: ['Taça de Portugal', 'Supertaça', 'Taça da Liga'] },
+            { flag: '🇳🇱', name: 'Países Bajos', leagues: ['Eredivisie Vrouwen'], cups: ['KNVB Beker', 'Supercup'] },
+            { flag: '🇨🇭', name: 'Suiza', leagues: ["AXA Women's Super League"], cups: [] },
+            { flag: '🇦🇷', name: 'Argentina', leagues: ['Primera División A'], cups: [] },
+            { flag: '🇧🇷', name: 'Brasil', leagues: ['Brasileirão Feminino'], cups: [] },
+            { flag: '🇲🇽', name: 'México', leagues: ['Liga MX Femenil'], cups: [] },
+            { flag: '🇺🇸', name: 'EE.UU.', leagues: ['NWSL'], cups: [] },
+        ];
+
+        // Place flags on two orbiting rings
+        function placeFlags(ringId, countries, radius) {
+            const ring = document.getElementById(ringId);
+            const n = countries.length;
+            countries.forEach((c, i) => {
+                const angle = (360 / n) * i;
+                const el = document.createElement('div');
+                el.className = 'orbit-flag';
+                el.textContent = c.flag;
+                el.title = c.name;
+                el.style.transform = `rotate(${angle}deg) translateY(-${radius}) rotate(-${angle}deg)`;
+                ring.appendChild(el);
+            });
+        }
+        // 7 on outer ring, 5 on inner ring
+        placeFlags('ring1', WORLD_DATA.slice(0, 7), '10rem');
+        placeFlags('ring2', WORLD_DATA.slice(7), '7.5rem');
+
+        // Country cards
+        const grid = document.getElementById('countries-es');
+        WORLD_DATA.forEach(c => {
+            const div = document.createElement('div');
+            div.className = 'country';
+            let html = `<div class="flag">${c.flag}</div><h4>${c.name}</h4><ul>`;
+            c.leagues.forEach(l => { html += `<li class="league">🏟️ ${l}</li>`; });
+            c.cups.forEach(cup => { html += `<li>🏆 ${cup}</li>`; });
+            html += '</ul>';
+            if (c.leagues.length + c.cups.length === 0) html += '<span class="tag">Próximamente</span>';
+            div.innerHTML = html;
+            grid.appendChild(div);
+        });
+        </script>
 
         <section class="block">
             <div class="section-head">
